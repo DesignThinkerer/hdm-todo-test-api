@@ -1,3 +1,25 @@
+Setup: I first added yarn and a service for mysql in dev.nix
+
+I've run into several issues while working on this with idx.dev :
+
+- Prisma failed to detect the libssl/openssl version to use
+
+To fix this, I simply added the package pkgs.openssl.dev in dev.nix
+
+- The mysql database couldn't be reached because of CORS issues. To solve this, I followed these steps:
+
+1. Go to Project IDX settings
+2. Make the port public by clicking on the lock icon
+3. In main.ts, set the required cors with enableCors
+
+I then followed the same implementation in `SaveTaskUsecase` for the `/tasks` and `/tasks/:id` endpoints to implement `/tasks` (POST) and `/tasks/:id` (PATCH) endpoints.
+
+I updated `TaskRepository` to create the task if the id is set, otherwise it update the tasks. 
+
+I added a method `findById` in `TaskRepository` that is used in `SaveTaskUsecase` to check if the task name was changed. If there is no change, the task is not updated. I also added a check to prevent the user to set the task to an empty string. 
+
+---
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
